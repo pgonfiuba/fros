@@ -2,22 +2,37 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, LogInfo
+from launch_ros.parameter_descriptions import ParameterValue
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    # Ruta al URDF
-    urdf_file = os.path.join(
-        get_package_share_directory('clase4'),
-        'robots','mycobot_320_m5_2022',
-        'mycobot_320_m5_2022.urdf'
+    default_robot = 'mycobot_320_m5_2022.urdf'
+
+    robot_arg = DeclareLaunchArgument(
+        'robot',
+        default_value=default_robot,
+        description='URDF relativo dentro de robots/'
     )
 
-    # Leer contenido del URDF
-    with open(urdf_file, 'r') as file:
-        robot_description = file.read()
+    urdf_file = PathJoinSubstitution([
+        FindPackageShare('clase4'),
+        'robots',
+        'mycobot_320_m5_2022',
+        LaunchConfiguration('robot')
+    ])
 
+    robot_description = ParameterValue(
+        Command(['cat', ' ', urdf_file]),
+        value_type=str
+    )
     return LaunchDescription([
+        robot_arg,
+
+        LogInfo(msg=['URDF: ', urdf_file]),
 
         Node(
             package='robot_state_publisher',
