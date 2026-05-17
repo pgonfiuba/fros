@@ -1,3 +1,33 @@
+## Clase 3 - Sistemas de referencia y TF2
+
+En esta clase se introducen los conceptos básicos de sistemas de referencia y transformaciones en ROS2 utilizando TF2.
+
+Se trabaja sobre un modelo simplificado de doble péndulo, acompañado por un launch mínimo para visualizar el robot en RViz y explorar el árbol de transformaciones generado por `robot_state_publisher`.
+
+En esta etapa del curso los modelos URDF y los launch files se utilizan únicamente como soporte para estudiar TF2, sin profundizar todavía en la descripción detallada de robots.
+
+### Contenido incluido
+
+* Modelo URDF simplificado de un doble péndulo
+* Launch básico para visualización en RViz
+* Ejemplos de transformaciones dinámicas y estáticas mediante TF2
+
+### Scripts y notebooks (`src/clase3/scripts/`)
+
+Se incluyen distintos ejemplos en Python para explorar el uso de transformaciones:
+
+* Notebook con ejercicios básicos utilizando ángulos Euler RPY
+* Nodo ROS2 que publica una transformación estática adicional respecto de `tool0`
+* Nodo ROS2 que adquiere durante un intervalo de tiempo la traslación de `tool0` respecto de `base_link` y grafica su evolución
+
+El objetivo es introducir:
+
+* sistemas de referencia,
+* representación de poses,
+* árboles TF2,
+* y consulta de transformaciones desde Python.
+
+
 ## Clase 4 - Modelado de robots: URDF, XACRO y cinemática en ROS2
 
 En esta clase se trabaja sobre la descripción de robots mediante URDF y XACRO, incorporando además herramientas básicas para visualización en RViz y publicación de estados articulares desde Python.
