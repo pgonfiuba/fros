@@ -35,6 +35,12 @@ def generate_launch_description():
     # -----------------------------
     # Recursos y entorno
     # -----------------------------
+    # Primero que todo, setear donde gazebo va a buscar los plugins de simulación (por ejemplo, el plugin de sensores)
+    os.environ['GZ_SIM_SYSTEM_PLUGIN_PATH'] = (
+        '/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins:'
+        + os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH', '')
+    )
+
     # Defino la ubicación de los modelos (por ejemplo un escritorio que quiera poner en el .world de gazebo)
     gazebo_models_path = 'models'
     pkg_share_gazebo = FindPackageShare('clase5').find('clase5')    
@@ -45,7 +51,6 @@ def generate_launch_description():
         'GZ_SIM_RESOURCE_PATH',
         gazebo_models_path
     )
-    print(f"GZ_SIM_RESOURCE_PATH set to: {gazebo_models_path}")
 
     # -----------------------------
     # Construcción robot_description
@@ -127,7 +132,8 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+                   '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'],
         output='screen'
     )
     

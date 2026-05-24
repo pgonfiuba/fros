@@ -129,6 +129,20 @@
     <self_collide>true</self_collide>
   </gazebo>
 
+  <!--*******************  CONFIGURACION DE SENSORES INTERNOS *******************-->
+  <gazebo reference="link2">
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>imu</topic>
+      <imu>
+        <angular_velocity>true</angular_velocity>
+        <linear_acceleration>true</linear_acceleration>
+      </imu>      
+    </sensor>
+  </gazebo>  
+
   <!--*******************  CONFIGURACION DE ros2_control *******************-->
   <ros2_control name="TorqueDrivenSystem" type="system">
     <hardware>

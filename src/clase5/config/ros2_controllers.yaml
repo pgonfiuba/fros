@@ -1,17 +1,17 @@
 controller_manager:
   ros__parameters:
-    update_rate: 200  # Hz
+    update_rate: 100  # Hz
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
     torque_input:
         type: effort_controllers/JointGroupEffortController
-        
+
 torque_input:
   ros__parameters:
     joints:
       - joint1
       - joint2
     interface_name: effort
-
+ 
