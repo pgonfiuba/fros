@@ -6,15 +6,26 @@ from rclpy.node import Node
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QSlider, QPushButton, QHBoxLayout, QLineEdit
 from PyQt5.QtCore import Qt, QTimer
 from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Float64
 
 JOINT_NAMES = ['joint1', 'joint2']
 TORQUE_MIN = -100.0  # Nm
 TORQUE_MAX = 100.0   # Nm
 
+TOPIC_MAP = {
+    'joint1': '/model/mi_robot/joint/joint1/cmd_force',
+    'joint2': '/model/mi_robot/joint/joint2/cmd_force',
+}
+
+
 class JointTorqueGUI(Node):
     def __init__(self):
         super().__init__('joint_torque_gui')
-        self.publisher_ = self.create_publisher(Float64MultiArray, '/torque_input/commands', 10)
+        # Un publisher Float64 por joint
+        self.publishers_ = {
+            joint: self.create_publisher(Float64, topic, 10)
+            for joint, topic in TOPIC_MAP.items()
+        }
         self.init_gui()
 
     def init_gui(self):
@@ -100,12 +111,12 @@ class JointTorqueGUI(Node):
         return int(1000.0 * (torque - TORQUE_MIN) / (TORQUE_MAX - TORQUE_MIN))
 
     def send_torque_command(self):
-        msg = Float64MultiArray()
-        msg.data = [self.slider_to_torque(self.sliders[j].value()) for j in JOINT_NAMES]
-        self.publisher_.publish(msg)
+        for joint in JOINT_NAMES:
+            msg = Float64()
+            msg.data = self.slider_to_torque(self.sliders[joint].value())
+            self.publishers_[joint].publish(msg)
 
     def send_torque_pulse(self):
-        # Publica el torque actual
         self.send_torque_command()
 
         try:
@@ -113,13 +124,14 @@ class JointTorqueGUI(Node):
         except ValueError:
             duration_ms = 500
 
-        # Luego de duration_ms manda torque cero
         QTimer.singleShot(duration_ms, self.release_torque)
-        
+
     def release_torque(self):
-        msg = Float64MultiArray()
-        msg.data = [0.0 for _ in JOINT_NAMES]
-        self.publisher_.publish(msg)
+        for joint in JOINT_NAMES:
+            msg = Float64()
+            msg.data = 0.0
+            self.publishers_[joint].publish(msg)
+
 
 def main():
     rclpy.init()

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="mundo_vacio">    
+  <world name="mundo_simulacion">    
       <gravity>0 0 -9.8</gravity>
       
 
@@ -46,4 +46,3 @@
 
   </world>
 </sdf>
-

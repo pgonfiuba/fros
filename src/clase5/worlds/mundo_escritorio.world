@@ -1,30 +1,7 @@
 <?xml version="1.0"?>
 <sdf version="1.6">
-    <world name="mundo_escritorio">
-        <!-- Si declaramos al menos 1 plugin, debemos manualmente incorporar los plugins básicos para que gazebo funcione! -->
-        <!-- Físicas -->
-        <plugin
-        filename="gz-sim-physics-system"
-        name="gz::sim::systems::Physics">
-        </plugin>
+    <world name="mundo_simulacion">
 
-        <!-- SIN ESTO no existe el servicio /world/default/create -->
-        <plugin
-        filename="gz-sim-user-commands-system"
-        name="gz::sim::systems::UserCommands">
-        </plugin>
-
-        <!-- Necesario para que ros_gz_sim pueda hacer broadcast del scene -->
-        <plugin
-        filename="gz-sim-scene-broadcaster-system"
-        name="gz::sim::systems::SceneBroadcaster">
-        </plugin>
-
-        <!-- Recién ahora podemos hablar de poner un sensor. En este caso va una IMU con su plugin específico! -->
-        <plugin filename="gz-sim-imu-system"
-        name="gz::sim::systems::Imu">
-        </plugin>
-    
         <gravity>0 0 -9.8</gravity>
 
         <include>

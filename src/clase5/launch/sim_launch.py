@@ -18,10 +18,8 @@ from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
-    RegisterEventHandler,
     SetEnvironmentVariable,
 )
-from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     Command,
@@ -31,6 +29,7 @@ from launch.substitutions import (
 )
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+import xacro
 
 
 def generate_launch_description():
@@ -107,6 +106,7 @@ def generate_launch_description():
         ])
     }
 
+
     # ==========================================================================
     # NODOS DE INFRAESTRUCTURA
     # Son los nodos necesarios para que el sistema funcione internamente.
@@ -128,36 +128,11 @@ def generate_launch_description():
         output='screen',
         arguments=[
             '-topic', 'robot_description',
-            '-name', 'robot_name',
+            '-name', 'mi_robot',
             '-allow_renaming', 'true',
             '-x', '0.0',
             '-y', '0.0',
             '-z', '0.55',
-        ],
-    )
-
-    # Publica las posiciones actuales de los joints en /joint_states.
-    # Se lanza DESPUÉS de que gz_spawn_entity termina (ver event handler abajo).
-    node_joint_state_broadcaster = Node(
-        package='controller_manager',
-        executable='spawner',
-        arguments=['joint_state_broadcaster'],
-    )
-
-    # Aplica los torques comandados en joint1 y joint2.
-    # Se lanza DESPUÉS de que joint_state_broadcaster termina (ver event handler abajo).
-    # Así se garantiza que el controller_manager ya está listo y se evita la race condition.
-    node_effort_controller = Node(
-        package='controller_manager',
-        executable='spawner',
-        arguments=[
-            'torque_input',
-            '--param-file',
-            PathJoinSubstitution([
-                FindPackageShare('clase5'),
-                'config',
-                'ros2_controllers.yaml',
-            ]),
         ],
     )
 
@@ -168,7 +143,17 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=[
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            # Joint states: Gazebo → ROS2
+            '/world/mundo_simulacion/model/mi_robot/joint_state@sensor_msgs/msg/JointState[gz.msgs.Model',
+            # IMU: Gazebo → ROS2 (el plugin de Gazebo se encargó de publicar este topic)
             '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU',
+            # Torque en ejes: ROS2 → Gazebo (el plugin de Gazebo se encargará de suscribirse a este topic)
+            '/model/mi_robot/joint/joint1/cmd_force@std_msgs/msg/Float64]gz.msgs.Double',
+            '/model/mi_robot/joint/joint2/cmd_force@std_msgs/msg/Float64]gz.msgs.Double',
+        ],
+        remappings=[
+            # Remapeo al topic estándar que espera rviz/plotjuggler
+            ('/world/mundo_simulacion/model/mi_robot/joint_state', '/joint_states'),
         ],
         output='screen'
     )
@@ -189,7 +174,8 @@ def generate_launch_description():
         ]),
         launch_arguments=[(
             'gz_args', [
-                '-r -v 1 ',
+                #'-r', # Descomentar para correr la simu inmediatamente despues de cargar
+                '-v 1 ',
                 PathJoinSubstitution([
                     FindPackageShare('clase5'),
                     'worlds',
@@ -225,32 +211,6 @@ def generate_launch_description():
         output='screen',
     )
 
-    # ==========================================================================
-    # EVENT HANDLERS — secuencia de arranque de controllers
-    #
-    # El orden garantizado es:
-    #   gz_spawn_entity termina
-    #       → joint_state_broadcaster arranca
-    #           → effort_controller arranca
-    #
-    # Sin esta cadena, los spawners de controllers llegan antes de que el
-    # controller_manager esté listo y aparecen warnings de
-    # "Could not contact service /controller_manager/list_controllers".
-    # ==========================================================================
-
-    on_spawn_start_joint_broadcaster = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=node_gz_spawn_entity,
-            on_exit=[node_joint_state_broadcaster],
-        )
-    )
-
-    on_joint_broadcaster_start_effort_controller = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=node_joint_state_broadcaster,
-            on_exit=[node_effort_controller],
-        )
-    )
 
     # ==========================================================================
     # LAUNCH DESCRIPTION
@@ -265,16 +225,11 @@ def generate_launch_description():
         arg_xacro_file,
         arg_world_name,
 
-
         # Entorno
         set_resource_path,
 
         # Simulador
         launch_gazebo,
-
-        # Event handlers (definen la secuencia de controllers)
-        on_spawn_start_joint_broadcaster,
-        on_joint_broadcaster_start_effort_controller,
 
         # Infraestructura
         node_robot_state_publisher,

@@ -123,6 +123,28 @@
   </joint>
   <link name="tool0" />
 
+  <!--*******************  CONFIGURACION DE PLUGINS DE GAZEBO  *******************-->
+  <gazebo>
+    <!-- Este plugin se encarga de publicar la información de la IMU en el topic /imu -->
+    <plugin filename="gz-sim-imu-system"
+      name="gz::sim::systems::Imu">
+    </plugin>    
+    <!-- Este plugin publica el estado de las articulaciones -->
+    <plugin filename="gz-sim-joint-state-publisher-system"
+      name="gz::sim::systems::JointStatePublisher">
+    </plugin>
+
+  <!-- Plugins para aplicar fuerzas/torques desde ROS2 a las juntas -->
+    <plugin filename="gz-sim-apply-joint-force-system"
+            name="gz::sim::systems::ApplyJointForce">
+      <joint_name>joint1</joint_name>
+    </plugin>
+    <plugin filename="gz-sim-apply-joint-force-system"
+            name="gz::sim::systems::ApplyJointForce">
+      <joint_name>joint2</joint_name>
+    </plugin>    
+  </gazebo>
+
   <!--*******************  CONFIGURACION DE COLISIONES *******************-->
   <!-- Self collision -->
   <gazebo>
@@ -143,42 +165,4 @@
     </sensor>
   </gazebo>  
 
-  <!--*******************  CONFIGURACION DE ros2_control *******************-->
-  <ros2_control name="TorqueDrivenSystem" type="system">
-    <hardware>
-      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-    </hardware>
-    <joint name="joint1">
-      <command_interface name="effort">
-        <param name="min">-100</param>
-        <param name="max">100</param>
-      </command_interface>
-      <state_interface name="position">
-        <param name="initial_value">$(arg q1_ini)</param>
-      </state_interface>
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-    </joint>
-
-    <joint name="joint2">
-      <command_interface name="effort">
-        <param name="min">-100</param>
-        <param name="max">100</param>
-      </command_interface>
-      <state_interface name="position">
-        <param name="initial_value">$(arg q2_ini)</param>
-      </state_interface>
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-    </joint>
-  </ros2_control>
-
-  <!-- ros_control plugin -->
-  <gazebo>
-    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>$(find clase5)/config/ros2_controllers.yaml</parameters>
-      <robot_param>robot_description</robot_param>
-      <robot_param_node>robot_state_publisher</robot_param_node>
-    </plugin>
-  </gazebo>
 </robot>
