@@ -6,16 +6,38 @@ from rclpy.node import Node
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QSlider, QPushButton, QHBoxLayout, QLineEdit
 from PyQt5.QtCore import Qt
 from control_msgs.msg import MultiDOFCommand
+from sensor_msgs.msg import JointState
 
-JOINT_NAMES = ['joint1', 'joint2']
 LIMIT_MIN = -3.14
 LIMIT_MAX = 3.14
 
 class JointControllerGUI(Node):
     def __init__(self):
         super().__init__('joint_controller_gui')
+        self.joint_names = []
+        self.publishers_ = {}
+
+        # Esperar el primer mensaje de joint_states para descubrir los joints
+        self.get_logger().info('Esperando joint_states para descubrir joints...')
+        self.discovery_sub = self.create_subscription(
+            JointState,
+            '/joint_states',
+            self.on_joint_states_discovered,
+            10
+        )
+        # Spin hasta tener los joints
+        while not self.joint_names:
+            rclpy.spin_once(self, timeout_sec=0.1)
+        
+        self.destroy_subscription(self.discovery_sub)
+        self.get_logger().info(f'Joints descubiertos: {self.joint_names}')        
+
         self.publisher_ = self.create_publisher(MultiDOFCommand, '/pid_controller/reference', 10)
         self.init_gui()
+
+    def on_joint_states_discovered(self, msg):
+        if not self.joint_names:
+            self.joint_names = [j for j in msg.name if j != 'fixed']
 
     def init_gui(self):
         self.app = QApplication(sys.argv)
@@ -27,7 +49,7 @@ class JointControllerGUI(Node):
         self.sliders = {}
         self.text_inputs = {}
 
-        for joint in JOINT_NAMES:
+        for joint in self.joint_names:
             joint_layout = QHBoxLayout()
 
             label = QLabel(joint)
@@ -85,8 +107,8 @@ class JointControllerGUI(Node):
 
     def send_trajectory(self):
         msg = MultiDOFCommand()
-        msg.dof_names = JOINT_NAMES
-        msg.values = [self.slider_to_position(self.sliders[j].value()) for j in JOINT_NAMES]
+        msg.dof_names = self.joint_names
+        msg.values = [self.slider_to_position(self.sliders[j].value()) for j in self.joint_names]
         self.publisher_.publish(msg)
 
 def main():
