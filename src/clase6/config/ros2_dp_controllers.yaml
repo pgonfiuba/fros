@@ -1,0 +1,32 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 200 #Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    pid_controller:
+      type: pid_controller/PidController
+
+pid_controller:
+  ros__parameters:
+    dof_names:
+      - joint1
+      - joint2
+    command_interface: effort
+    reference_and_state_interfaces:
+      - position
+      - velocity
+    gains:
+      joint1:
+        p: 36.0
+        i: 276.0
+        d: 1.95
+        i_clamp_max: 15.0
+        i_clamp_min: -15.0
+      joint2:
+        p: 36.0
+        i: 570.0
+        d: 0.95
+        i_clamp_max: 15.0
+        i_clamp_min: -15.0
