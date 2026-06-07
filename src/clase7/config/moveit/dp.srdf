@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="double_pendulum">
+
+  <group name="pendulum">
+    <joint name="joint1" />
+    <joint name="joint2" />
+  </group>
+
+  <end_effector name="tool0" parent_link="tool0" group="pendulum" />
+
+  <group_state name="home" group="pendulum">
+    <joint name="joint1" value="0" />
+    <joint name="joint2" value="0" />
+  </group_state>
+
+  <group_state name="POS1" group="pendulum">
+    <joint name="joint1" value="0.7" />
+    <joint name="joint2" value="1.57" />
+  </group_state>
+  
+  <group_state name="POS2" group="pendulum">
+    <joint name="joint1" value="-0.7" />
+    <joint name="joint2" value="-1.57" />
+  </group_state>
+
+  <group_state name="POS3" group="pendulum">
+    <joint name="joint1" value="1.57" />
+    <joint name="joint2" value="-1.57" />
+  </group_state>
+
+  <group_state name="POSLIN1" group="pendulum">
+    <joint name="joint1" value="1" />
+    <joint name="joint2" value="2" />
+  </group_state>
+
+  <disable_collisions link1="base_link" link2="link1" reason="Adjacent" />
+  <disable_collisions link1="link1" link2="link2" reason="Adjacent" />
+  <disable_collisions link1="base_link" link2="link2" reason="Never" />
+
+</robot>

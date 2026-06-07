@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="myCobot320">
+
+  <xacro:property name="width" value=".2" />
+
+  <xacro:property name="joint_effort" value="56.0" />
+  <xacro:property name="joint_velocity" value="2.792527" />
+  <xacro:property name="joint_damping" value="0.0" />
+  <xacro:property name="joint_friction" value="0.0" />
+  <xacro:property name="base_mass" value="0.12" />
+  <xacro:property name="link1_mass" value="0.12" />
+  <xacro:property name="link2_mass" value="0.19" />
+  <xacro:property name="link3_mass" value="0.16" />
+  <xacro:property name="link4_mass" value="0.124" />
+  <xacro:property name="link5_mass" value="0.11" />
+  <xacro:property name="link6_mass" value="0.0739" />
+  <xacro:property name="flange_mass" value="0.035" />
+
+  <!-- Condición inicial de posiciones de los ejes -->
+  <xacro:property name="q1_ini" default="0.0" />
+  <xacro:property name="q2_ini" default="0.0" />
+  <xacro:property name="q3_ini" default="0.0" />
+  <xacro:property name="q4_ini" default="0.0" />
+  <xacro:property name="q5_ini" default="0.0" />
+  <xacro:property name="q6_ini" default="0.0" />
+
+
+  <xacro:macro name="link_inertial" params="xg yg zg mass ixx iyy izz">
+    <inertial>
+      <origin xyz="${xg} ${yg} ${zg}" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <inertia ixx="${ixx}" ixy="0.0" ixz="0.0" iyy="${iyy}" iyz="0.0" izz="${izz}" />
+    </inertial>
+  </xacro:macro>
+
+  <!-- World link -->
+  <link name="world" />
+  <!-- Junta fija entre world y base_link -->
+  <joint name="fixed" type="fixed">
+    <parent link="world" />
+    <child link="base_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="base_link">
+    <xacro:link_inertial xg="0" yg="0" zg="0" mass="${base_mass}" ixx="0.000148" iyy="0.000148"
+      izz="0.000096" />
+
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/base.dae" />
+      </geometry>
+      <origin xyz="0.0 0 0 " rpy=" 0 0 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/base.dae" />
+      </geometry>
+      <origin xyz="0.0 0 0 " rpy=" 0 0 1.5708" />
+    </collision>
+  </link>
+
+  <link name="link1">
+    <xacro:link_inertial xg="0" yg="0" zg="-0.078" mass="${link1_mass}" ixx="0.000148"
+      iyy="0.000148" izz="0.000096" />
+
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link1.dae" />
+      </geometry>
+
+      <origin xyz="0.0 0.0 -0.078 " rpy=" 0 0 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link1.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 -0.078 " rpy=" 0 0 1.5708" />
+    </collision>
+  </link>
+
+
+  <link name="link2">
+    <xacro:link_inertial xg="0" yg="0" zg="-0.04" mass="${link2_mass}" ixx="0.000148" iyy="0.000148"
+      izz="0.000096" />
+
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link2.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 -0.04 " rpy=" 0 1.5708 0" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link2.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 -0.04 " rpy=" 0 1.5708 0" />
+    </collision>
+  </link>
+
+
+  <link name="link3">
+    <xacro:link_inertial xg="0" yg="0" zg="0.039" mass="${link3_mass}" ixx="0.000148" iyy="0.000148"
+      izz="0.000096" />
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link3.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 0.039 " rpy=" 1.5708 1.5708 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link3.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 0.039 " rpy=" 1.5708 1.5708 1.5708" />
+    </collision>
+  </link>
+
+
+  <link name="link4">
+    <xacro:link_inertial xg="0" yg="0.0024" zg="-0.05" mass="${link4_mass}" ixx="0.000103"
+      iyy="0.000103" izz="0.000096" />
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link4.dae" />
+      </geometry>
+      <origin xyz="0.0 -0.0024 -0.05" rpy=" 1.5708 1.5708 0" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link4.dae" />
+      </geometry>
+      <origin xyz="0.0 -0.0024 -0.05" rpy=" 1.5708 1.5708 0" />
+    </collision>
+  </link>
+
+
+  <link name="link5">
+    <xacro:link_inertial xg="0" yg="0" zg="-0.05" mass="${link5_mass}" ixx="0.000103" iyy="0.000103"
+      izz="0.000096" />
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link5.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 -0.05 " rpy=" 0  0 -1.5708" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.01" rpy="0 0 -1.5708" />
+      <geometry>
+        <box size="0.103 0.059 0.080" />
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="link6">
+    <xacro:link_inertial xg="0" yg="0" zg="-0.0115" mass="${link6_mass}" ixx="0.00006649"
+      iyy="0.00006649" izz="0.000096" />
+    <visual>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link6.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 -0.0115 " rpy=" 1.5708 1.5708 0" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link6.dae" />
+      </geometry>
+      <origin xyz="0.0 0.0 -0.0115 " rpy=" 1.5708 1.5708 0" />
+    </collision>
+  </link>
+
+
+  <joint name="joint1" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-2.93" upper="2.93" velocity="${joint_velocity}" />
+    <parent link="base_link" />
+    <child link="link1" />
+    <origin xyz="0 0 0.1739" rpy="0 0 0" />
+    <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+  </joint>
+
+
+  <joint name="joint2" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-2.35" upper="2.35" velocity="${joint_velocity}" />
+    <parent link="link1" />
+    <child link="link2" />
+    <origin xyz="0 -0.08878 0" rpy="0 -1.5708 1.5708" />
+    <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+  </joint>
+
+
+  <joint name="joint3" type="revolute">
+    <axis xyz=" 0 0 1" />
+    <limit effort="1000.0" lower="-2.53" upper="2.53" velocity="${joint_velocity}" />
+    <parent link="link2" />
+    <child link="link3" />
+    <origin xyz="0.135 0 -0.08878   " rpy="0 0 0" />
+    <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+  </joint>
+
+  <joint name="joint4" type="revolute">
+    <axis xyz=" 0 0 1" />
+    <limit effort="1000.0" lower="-2.53" upper="2.53" velocity="${joint_velocity}" />
+    <parent link="link3" />
+    <child link="link4" />
+    <origin xyz="0.120 0 0.08878 " rpy=" 0 0 1.57080" />
+    <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+  </joint>
+
+  <joint name="joint5" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-2.93" upper="2.93" velocity="${joint_velocity}" />
+    <parent link="link4" />
+    <child link="link5" />
+    <origin xyz="0 -0.095 0.0" rpy="1.5708 0 0" />
+    <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+  </joint>
+
+  <joint name="joint6" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="${joint_velocity}" />
+    <parent link="link5" />
+    <child link="link6" />
+    <origin xyz="0 0.0655 0.0" rpy="-1.5708 0 0" />
+    <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+  </joint>
+
+  <!-- CONFIGURACION DE ros2_control -->
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="joint1">
+      <command_interface name="effort">
+        <param name="min">-100</param>
+        <param name="max">100</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${q1_ini}</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="joint2">
+      <command_interface name="effort">
+        <param name="min">-100</param>
+        <param name="max">100</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${q2_ini}</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="joint3">
+      <command_interface name="effort">
+        <param name="min">-100</param>
+        <param name="max">100</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${q3_ini}</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="joint4">
+      <command_interface name="effort">
+        <param name="min">-100</param>
+        <param name="max">100</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${q4_ini}</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="joint5">
+      <command_interface name="effort">
+        <param name="min">-100</param>
+        <param name="max">100</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${q5_ini}</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="joint6">
+      <command_interface name="effort">
+        <param name="min">-100</param>
+        <param name="max">100</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${q6_ini}</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+
+  </ros2_control>
+
+
+  <!-- ros_control plugin. El archivo de configuración de controladores que pasamos al plugin lo
+  recibimos como parámetro desde el launch al momento de cargar -->
+  <xacro:arg name="controllers_file" default="$(find clase6)/config/ros2_mycobot_controllers.yaml" />
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(arg controllers_file)</parameters>
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+    </plugin>
+  </gazebo>
+
+
+  <!--  CONFIGURACION DE COLISIONES -->
+  <!-- Self collision -->
+  <gazebo>
+    <self_collide>false</self_collide>
+  </gazebo>
+
+
+</robot>
