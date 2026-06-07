@@ -49,13 +49,13 @@
 
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/base.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/base.dae" />
       </geometry>
       <origin xyz="0.0 0 0 " rpy=" 0 0 1.5708" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/base.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/base.dae" />
       </geometry>
       <origin xyz="0.0 0 0 " rpy=" 0 0 1.5708" />
     </collision>
@@ -67,14 +67,14 @@
 
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link1.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link1.dae" />
       </geometry>
 
       <origin xyz="0.0 0.0 -0.078 " rpy=" 0 0 1.5708" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link1.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link1.dae" />
       </geometry>
       <origin xyz="0.0 0.0 -0.078 " rpy=" 0 0 1.5708" />
     </collision>
@@ -87,13 +87,13 @@
 
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link2.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link2.dae" />
       </geometry>
       <origin xyz="0.0 0.0 -0.04 " rpy=" 0 1.5708 0" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link2.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link2.dae" />
       </geometry>
       <origin xyz="0.0 0.0 -0.04 " rpy=" 0 1.5708 0" />
     </collision>
@@ -105,13 +105,13 @@
       izz="0.000096" />
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link3.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link3.dae" />
       </geometry>
       <origin xyz="0.0 0.0 0.039 " rpy=" 1.5708 1.5708 1.5708" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link3.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link3.dae" />
       </geometry>
       <origin xyz="0.0 0.0 0.039 " rpy=" 1.5708 1.5708 1.5708" />
     </collision>
@@ -123,13 +123,13 @@
       iyy="0.000103" izz="0.000096" />
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link4.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link4.dae" />
       </geometry>
       <origin xyz="0.0 -0.0024 -0.05" rpy=" 1.5708 1.5708 0" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link4.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link4.dae" />
       </geometry>
       <origin xyz="0.0 -0.0024 -0.05" rpy=" 1.5708 1.5708 0" />
     </collision>
@@ -141,7 +141,7 @@
       izz="0.000096" />
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link5.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link5.dae" />
       </geometry>
       <origin xyz="0.0 0.0 -0.05 " rpy=" 0  0 -1.5708" />
     </visual>
@@ -159,13 +159,13 @@
       iyy="0.00006649" izz="0.000096" />
     <visual>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link6.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link6.dae" />
       </geometry>
       <origin xyz="0.0 0.0 -0.0115 " rpy=" 1.5708 1.5708 0" />
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://clase6/robot_description/mycobot_320_m5_2022/link6.dae" />
+        <mesh filename="package://clase7/robot_description/mycobot_320_m5_2022/link6.dae" />
       </geometry>
       <origin xyz="0.0 0.0 -0.0115 " rpy=" 1.5708 1.5708 0" />
     </collision>
@@ -227,6 +227,15 @@
     <origin xyz="0 0.0655 0.0" rpy="-1.5708 0 0" />
     <dynamics damping="${joint_damping}" friction="${joint_friction}" />
   </joint>
+
+  <!--  DEFINICIONES DE HERRAMIENTA  -->
+  <!-- Terna TOOL0 en el extremo de link2 -->
+  <joint name="tool0_joint" type="fixed">
+    <parent link="link6" />
+    <child link="tool0" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="tool0" />
 
   <!-- CONFIGURACION DE ros2_control -->
   <ros2_control name="GazeboSystem" type="system">
@@ -305,7 +314,7 @@
 
   <!-- ros_control plugin. El archivo de configuración de controladores que pasamos al plugin lo
   recibimos como parámetro desde el launch al momento de cargar -->
-  <xacro:arg name="controllers_file" default="$(find clase6)/config/ros2_mycobot_controllers.yaml" />
+  <xacro:arg name="controllers_file" default="$(find clase7)/config/ros2_mycobot_controllers.yaml" />
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(arg controllers_file)</parameters>
@@ -317,9 +326,26 @@
 
   <!--  CONFIGURACION DE COLISIONES -->
   <!-- Self collision -->
-  <gazebo>
+  <gazebo reference="base_link">
     <self_collide>false</self_collide>
   </gazebo>
-
+  <gazebo reference="link1">
+    <self_collide>false</self_collide>
+  </gazebo>
+  <gazebo reference="link2">
+    <self_collide>false</self_collide>
+  </gazebo>
+  <gazebo reference="link3">
+    <self_collide>false</self_collide>
+  </gazebo>
+  <gazebo reference="link4">
+    <self_collide>false</self_collide>
+  </gazebo>
+  <gazebo reference="link5">
+    <self_collide>false</self_collide>
+  </gazebo>
+  <gazebo reference="link6">
+    <self_collide>false</self_collide>
+  </gazebo>
 
 </robot>

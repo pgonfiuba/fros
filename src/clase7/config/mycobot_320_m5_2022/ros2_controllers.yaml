@@ -1,24 +1,23 @@
 controller_manager:
   ros__parameters:
-    update_rate: 200 #Hz
-
+    update_rate: 200 # Hz
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
 
-    pid_controller:
-      type: pid_controller/PidController
-
-pid_controller:
+joint_trajectory_controller:
   ros__parameters:
-    dof_names:
+    joints:
       - joint1
       - joint2
       - joint3
       - joint4
       - joint5
       - joint6
-    command_interface: effort
-    reference_and_state_interfaces:
+    command_interfaces:
+      - effort
+    state_interfaces:
       - position
       - velocity
     gains:

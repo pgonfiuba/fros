@@ -86,22 +86,10 @@ def generate_launch_description():
         description='True para usar un clock simulado'
     )
 
-    arg_xacro_file = DeclareLaunchArgument(
-        'xacro_file',
-        default_value='dp/dp.xacro',
-        description='Archivo de definición del robot'
-    )
-
     arg_world_name = DeclareLaunchArgument(
         'world_name',
         default_value='mundo_escritorio.world',
         description='Nombre del archivo del mundo para Gazebo'
-    )
-
-    arg_controllers_file = DeclareLaunchArgument(
-        'controllers_file',
-        default_value='ros2_dp_controllers.yaml',
-        description='Archivo de configuración de controladores'
     )
 
     # ==========================================================================
@@ -113,47 +101,11 @@ def generate_launch_description():
     robot_description = {
         'robot_description': Command([
             FindExecutable(name='xacro'), ' ',
-            PathJoinSubstitution([
-                FindPackageShare('clase7'),
-                'robot_description',
-                LaunchConfiguration('xacro_file')
-            ]),
+            os.path.join(pkg_share, 'robot_description', 'dp', 'dp.xacro'),
             ' controllers_file:=',
-            PathJoinSubstitution([
-                FindPackageShare('clase7'),
-                'config',
-                LaunchConfiguration('controllers_file'),
-            ]),
+            os.path.join(pkg_share, 'config', 'dp', 'ros2_controllers.yaml'),
         ])
     }
-
-    # ==========================================================================
-    # CONFIGURACIÓN DE MOVEIT
-    # Se cargan los archivos de configuración como parámetros del move_group.
-    # ==========================================================================
-    # ompl_planning_yaml_path = os.path.join(pkg_share, 'config', 'moveit', 'ompl_planning.yaml')
-    # with open(ompl_planning_yaml_path, 'r') as f:
-    #     ompl_planning_yaml = yaml.safe_load(f)
-
-    # planning_pipelines = {
-    #     'planning_pipelines': ['ompl'],
-    #     'default_planning_pipeline': 'ompl',
-    #     'ompl': ompl_planning_yaml,
-    # }
-
-    # srdf_file = os.path.join(pkg_share, 'config', 'moveit', 'dp.srdf')
-    # with open(srdf_file, 'r') as f:
-    #     robot_description_semantic = {'robot_description_semantic': f.read()}
-
-    # robot_description_kinematics = {
-    #     'robot_description_kinematics': {
-    #         'pendulum': {
-    #             'kinematics_solver': 'kdl_kinematics_plugin/KDLKinematicsPlugin',
-    #             'kinematics_solver_search_resolution': 0.005,
-    #             'kinematics_solver_timeout': 0.05,
-    #         }
-    #     }
-    # }
 
     # ==========================================================================
     # NODOS DE INFRAESTRUCTURA
@@ -204,11 +156,7 @@ def generate_launch_description():
         arguments=[
             'joint_trajectory_controller',
             '--param-file',
-            PathJoinSubstitution([
-                FindPackageShare('clase7'),
-                'config',
-                LaunchConfiguration('controllers_file'),
-            ]),
+            os.path.join(pkg_share, 'config', 'dp', 'ros2_controllers.yaml'),
         ],
     )
 
@@ -231,28 +179,28 @@ def generate_launch_description():
             file_path=os.path.join(pkg_share, 'robot_description', 'dp', 'dp.xacro')
         )
         .robot_description_semantic(
-            file_path=os.path.join(pkg_share, 'config', 'moveit', 'dp.srdf')
+            file_path=os.path.join(pkg_share, 'config', 'dp', 'moveit', 'dp.srdf')
         )
         .robot_description_kinematics(
-            file_path=os.path.join(pkg_share, 'config', 'moveit', 'kinematics.yaml')
+            file_path=os.path.join(pkg_share, 'config', 'dp', 'moveit', 'kinematics.yaml')
         )
         .trajectory_execution(
-            file_path=os.path.join(pkg_share, 'config', 'moveit', 'moveit_controllers.yaml')
+            file_path=os.path.join(pkg_share, 'config', 'dp', 'moveit', 'moveit_controllers.yaml')
         )  
         .planning_pipelines(
             pipelines=["ompl", "pilz_industrial_motion_planner", "stomp"],
             default_planning_pipeline="ompl"
         )
         .joint_limits(
-            file_path=os.path.join(pkg_share, 'config', 'moveit', 'joint_limits.yaml')
+            file_path=os.path.join(pkg_share, 'config', 'dp', 'moveit', 'joint_limits.yaml')
         )
         .pilz_cartesian_limits(
-            file_path=os.path.join(pkg_share, 'config', 'moveit', 'pilz_cartesian_limits.yaml')
+            file_path=os.path.join(pkg_share, 'config', 'dp', 'moveit', 'pilz_cartesian_limits.yaml')
         )
         .to_moveit_configs()
     )
 
-    ompl_yaml_path = os.path.join(pkg_share, 'config', 'moveit', 'ompl_planning.yaml')
+    ompl_yaml_path = os.path.join(pkg_share, 'config', 'dp', 'moveit', 'ompl_planning.yaml')
     with open(ompl_yaml_path, 'r') as f:
         ompl_config = yaml.safe_load(f)
 
@@ -265,19 +213,7 @@ def generate_launch_description():
             {'ompl': ompl_config},
             {'use_sim_time': True},
         ],
-    )    
-    # node_move_group = Node(
-    #     package='moveit_ros_move_group',
-    #     executable='move_group',
-    #     output='screen',
-    #     parameters=[
-    #         robot_description,
-    #         robot_description_semantic,
-    #         robot_description_kinematics,
-    #         planning_pipelines,
-    #         {'use_sim_time': True},
-    #     ],
-    # )
+    )
     
 
     # ==========================================================================
@@ -319,12 +255,8 @@ def generate_launch_description():
                     'worlds',
                     LaunchConfiguration('world_name')
                 ]),
-                ' --gui-config ',
-                PathJoinSubstitution([
-                    FindPackageShare('clase7'),
-                    'config',
-                    'gazebo.config'
-                ])
+                ' --gui-config ', 
+                os.path.join(pkg_share, 'config', 'gazebo.config')
             ]
         )]
     )
@@ -339,9 +271,17 @@ def generate_launch_description():
             'ros2', 'topic', 'pub', '--once',
             '/planning_scene',
             'moveit_msgs/msg/PlanningScene',
-            '{"is_diff": true, "world": {"collision_objects": [{"id": "bloque_caible", "header": {"frame_id": "world"}, "operation": 0, "primitives": [{"type": 3, "dimensions": [0.5, 0.02]}], "primitive_poses": [{"position": {"x": 0.3, "y": 0.0, "z": 0.0}, "orientation": {"w": 1.0}}]}]}, "object_colors": [{"id": "bloque_caible", "color": {"r": 1.0, "g": 0.0, "b": 0.0, "a": 1.0}}]}'
+            '{"is_diff": true, "world": {"collision_objects": [{"id": "bloque_caible", "header": {"frame_id": "world"}, "operation": 0, "primitives": [{"type": 3, "dimensions": [0.5, 0.02]}], "primitive_poses": [{"position": {"x": 0.3, "y": 0.0, "z": 0.0}, "orientation": {"w": 1.0}}]}]}, "object_colors": [{"id": "bloque_caible", "color": {"r": 0.0, "g": 1.0, "b": 0.0, "a": 1.0}}]}'
         ],
         output='screen'
+    )
+    event_publish_scene = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_trajectory_controller_spawner,
+            on_exit=[
+                TimerAction(period=3.0, actions=[exec_planning_scene])
+            ]
+        )
     )
 
 
@@ -349,15 +289,7 @@ def generate_launch_description():
     # NODOS DE USUARIO
     # Interfaces para operar o visualizar el sistema.
     # ==========================================================================
-
-    node_rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        arguments=['-d', os.path.join(pkg_share, 'config', 'display.rviz')],
-        parameters=[{'use_sim_time': True}]
-    )
+    
     node_rviz = Node(
         package='rviz2',
         executable='rviz2',
@@ -391,9 +323,7 @@ def generate_launch_description():
     return LaunchDescription([
         # Argumentos
         arg_use_sim_time,
-        arg_xacro_file,
         arg_world_name,
-        arg_controllers_file,
 
         # Entorno
         set_resource_path,
@@ -416,7 +346,5 @@ def generate_launch_description():
         node_rviz,
         node_plotjuggler,
 
-        # Sincronizo la escena de planificación con el mundo de Gazebo 
-        # después de un delay para asegurar que move_group ya esté corriendo y pueda recibir el mensaje.
-        TimerAction(period=8.0, actions=[exec_planning_scene]),
+        event_publish_scene,
     ])
