@@ -165,7 +165,7 @@
 
   <joint name="joint1" type="revolute">
     <axis xyz="0 0 1" />
-    <limit effort="1000.0" lower="-2.93" upper="2.93" velocity="0" />
+    <limit effort="1000.0" lower="-2.93" upper="2.93" velocity="10" />
     <parent link="base_link" />
     <child link="link1" />
     <origin xyz="0 0 0.1739" rpy="0 0 0" />
@@ -175,7 +175,7 @@
 
   <joint name="joint2" type="revolute">
     <axis xyz="0 0 1" />
-    <limit effort="1000.0" lower="-2.35" upper="2.35" velocity="0" />
+    <limit effort="1000.0" lower="-2.35" upper="2.35" velocity="10" />
     <parent link="link1" />
     <child link="link2" />
     <origin xyz="0 -0.08878 0" rpy="0 -1.5708 1.5708" />
@@ -185,7 +185,7 @@
 
   <joint name="joint3" type="revolute">
     <axis xyz=" 0 0 1" />
-    <limit effort="1000.0" lower="-2.53" upper="2.53" velocity="0" />
+    <limit effort="1000.0" lower="-2.53" upper="2.53" velocity="10" />
     <parent link="link2" />
     <child link="link3" />
     <origin xyz="0.135 0 -0.08878   " rpy="0 0 0" />
@@ -194,7 +194,7 @@
 
   <joint name="joint4" type="revolute">
     <axis xyz=" 0 0 1" />
-    <limit effort="1000.0" lower="-2.53" upper="2.53" velocity="0" />
+    <limit effort="1000.0" lower="-2.53" upper="2.53" velocity="10" />
     <parent link="link3" />
     <child link="link4" />
     <origin xyz="0.120 0 0.08878 " rpy=" 0 0 1.57080" />
@@ -203,7 +203,7 @@
 
   <joint name="joint5" type="revolute">
     <axis xyz="0 0 1" />
-    <limit effort="1000.0" lower="-2.93" upper="2.93" velocity="0" />
+    <limit effort="1000.0" lower="-2.93" upper="2.93" velocity="10" />
     <parent link="link4" />
     <child link="link5" />
     <origin xyz="0 -0.095 0.0" rpy="1.5708 0 0" />
@@ -212,7 +212,7 @@
 
   <joint name="joint6" type="revolute">
     <axis xyz="0 0 1" />
-    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0" />
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="10" />
     <parent link="link5" />
     <child link="link6" />
     <origin xyz="0 0.0655 0.0" rpy="-1.5708 0 0" />
