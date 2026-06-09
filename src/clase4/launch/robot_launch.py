@@ -15,12 +15,12 @@ def generate_launch_description():
     robot_arg = DeclareLaunchArgument(
         'robot',
         default_value=default_robot,
-        description='URDF relativo dentro de robots/'
+        description='URDF relativo dentro de robot_description/'
     )
 
     urdf_file = PathJoinSubstitution([
         FindPackageShare('clase4'),
-        'robots',
+        'robot_description',
         LaunchConfiguration('robot')
     ])
 

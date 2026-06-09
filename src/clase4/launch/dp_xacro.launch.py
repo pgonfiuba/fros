@@ -15,7 +15,7 @@ def generate_launch_description():
             ' ',
             PathJoinSubstitution(
                 [FindPackageShare('clase4'),
-                 'robots', 'dp_xacro', 'double_pendulum.urdf.xacro']
+                 'robot_description', 'dp_xacro', 'double_pendulum.urdf.xacro']
             ),
         ]
     )

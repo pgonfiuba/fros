@@ -13,7 +13,7 @@ find_package(ament_cmake REQUIRED)
 
 # Copy necessary files to designated locations in the project
 install (
-  DIRECTORY urdf
+  DIRECTORY robot_description
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -26,6 +26,16 @@ install(DIRECTORY launch
     DESTINATION share/${PROJECT_NAME}/
 )
 
+
+install(PROGRAMS
+  scripts/tf_sampler.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(PROGRAMS
+  scripts/static_tool_publisher.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

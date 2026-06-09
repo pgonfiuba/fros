@@ -7,13 +7,13 @@
   <link name="base_link">
     <visual>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/base.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/base.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 1.5708"/>
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/base.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/base.dae"/>
         </geometry>
         <origin xyz = "0.0 0 0 " rpy = " 0 0 1.5708"/>
     </collision>
@@ -22,14 +22,14 @@
   <link name="link1">
     <visual>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link1.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link1.dae"/>
       </geometry>
 
     <origin xyz = "0.0 0.0 -0.078 " rpy = " 0 0 1.5708"/>
     </visual>
     <collision>
      <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link1.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link1.dae"/>
       </geometry>
      <origin xyz = "0.0 0.0 -0.078 " rpy = " 0 0 1.5708"/>
     </collision>
@@ -40,13 +40,13 @@
     <visual>
       <geometry>
        
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link2.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link2.dae"/>
       </geometry>
        <origin xyz = "0.0 0.0 -0.04 " rpy = " 0 1.5708 0"/>
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link2.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link2.dae"/>
       </geometry>
        <origin xyz = "0.0 0.0 -0.04 " rpy = " 0 1.5708 0"/>
     </collision>
@@ -56,13 +56,13 @@
   <link name="link3">
     <visual>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link3.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link3.dae"/>
       </geometry>
     <origin xyz = "0.0 0.0 0.039 " rpy = " 1.5708 1.5708 1.5708"/>
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link3.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link3.dae"/>
       </geometry>
       <origin xyz = "0.0 0.0 0.039 " rpy = " 1.5708 1.5708 1.5708"/>
     </collision>
@@ -72,13 +72,13 @@
   <link name="link4">
     <visual>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link4.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link4.dae"/>
       </geometry>
          <origin xyz = "0.0 -0.0024 -0.05" rpy = " 1.5708 1.5708 0"/>
     </visual>
     <collision>
        <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link4.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link4.dae"/>
       </geometry>
        <origin xyz = "0.0 -0.0024 -0.05" rpy = " 1.5708 1.5708 0"/>
     </collision>
@@ -88,13 +88,13 @@
   <link name="link5">
     <visual>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link5.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link5.dae"/>
       </geometry>
     <origin xyz = "0.0 0.0 -0.05 " rpy = " 0  0 -1.5708"/>
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link5.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link5.dae"/>
       </geometry>
     <origin xyz = "0.0 0.0 -0.05 " rpy = " 0  0 -1.5708"/>
     </collision>
@@ -104,13 +104,13 @@
   <link name="link6">
     <visual>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link6.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link6.dae"/>
       </geometry>
      <origin xyz = "0.0 0.0 -0.0115 " rpy = " 1.5708 1.5708 0"/>
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://clase4/robots/mycobot_320_m5_2022/link6.dae"/>
+       <mesh filename="package://clase4/robot_description/mycobot_320_m5_2022/link6.dae"/>
       </geometry>
     <origin xyz = "0.0 0.0 -0.0115 " rpy = " 1.5708 1.5708 0"/>
     </collision>

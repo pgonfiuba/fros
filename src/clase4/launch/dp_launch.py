@@ -9,7 +9,7 @@ def generate_launch_description():
     # Ruta al URDF
     urdf_file = os.path.join(
         get_package_share_directory('clase4'),
-        'robots','dp',
+        'robot_description','dp',
         'double_pendulum.urdf'
     )
 
