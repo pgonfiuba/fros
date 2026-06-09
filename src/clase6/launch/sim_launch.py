@@ -151,7 +151,7 @@ def generate_launch_description():
             '-allow_renaming', 'true',
             '-x', '0.0',
             '-y', '0.0',
-            '-z', '0.55',
+            '-z', '0.553',
         ],
     )
 

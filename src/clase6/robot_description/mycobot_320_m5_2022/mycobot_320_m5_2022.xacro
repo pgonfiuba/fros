@@ -316,9 +316,9 @@
 
 
   <!--  CONFIGURACION DE COLISIONES -->
-  <!-- Self collision -->
+  <!-- Self collision: así se bloquea cuando algún eslabón choca con otro -->
   <gazebo>
-    <self_collide>false</self_collide>
+    <self_collide>true</self_collide>
   </gazebo>
 
 

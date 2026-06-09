@@ -326,26 +326,10 @@
 
   <!--  CONFIGURACION DE COLISIONES -->
   <!-- Self collision -->
-  <gazebo reference="base_link">
+    <!-- Self collision -->
+  <gazebo>
     <self_collide>false</self_collide>
   </gazebo>
-  <gazebo reference="link1">
-    <self_collide>false</self_collide>
-  </gazebo>
-  <gazebo reference="link2">
-    <self_collide>false</self_collide>
-  </gazebo>
-  <gazebo reference="link3">
-    <self_collide>false</self_collide>
-  </gazebo>
-  <gazebo reference="link4">
-    <self_collide>false</self_collide>
-  </gazebo>
-  <gazebo reference="link5">
-    <self_collide>false</self_collide>
-  </gazebo>
-  <gazebo reference="link6">
-    <self_collide>false</self_collide>
-  </gazebo>
+
 
 </robot>
