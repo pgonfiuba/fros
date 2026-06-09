@@ -271,7 +271,7 @@ def generate_launch_description():
             'ros2', 'topic', 'pub', '--once',
             '/planning_scene',
             'moveit_msgs/msg/PlanningScene',
-            '{"is_diff": true, "world": {"collision_objects": [{"id": "bloque_caible", "header": {"frame_id": "world"}, "operation": 0, "primitives": [{"type": 3, "dimensions": [0.5, 0.02]}], "primitive_poses": [{"position": {"x": 0.3, "y": 0.0, "z": 0.0}, "orientation": {"w": 1.0}}]}]}, "object_colors": [{"id": "bloque_caible", "color": {"r": 0.0, "g": 1.0, "b": 0.0, "a": 1.0}}]}'
+            '{"is_diff": true, "world": {"collision_objects": [{"id": "bloque_caible", "header": {"frame_id": "world"}, "operation": 0, "primitives": [{"type": 3, "dimensions": [0.5, 0.03]}], "primitive_poses": [{"position": {"x": 0.3, "y": 0.0, "z": 0.25}, "orientation": {"w": 1.0}}]}]}, "object_colors": [{"id": "bloque_caible", "color": {"r": 0.0, "g": 1.0, "b": 0.0, "a": 1.0}}]}'
         ],
         output='screen'
     )

@@ -2,7 +2,7 @@
 <robot name="double_pendulum" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Incluimos los parámetros comunes -->
-  <xacro:include filename="$(find clase6)/robot_description/dp/dp_params.xacro" />
+  <xacro:include filename="$(find clase7)/robot_description/dp/dp_params.xacro" />
 
   <!--  DEFINICIONES DE ESLABONES  -->
   <!-- World link -->
@@ -165,7 +165,7 @@
 
   <!-- ros_control plugin. El archivo de configuración de controladores que pasamos al plugin lo
   recibimos como parámetro desde el launch al momento de cargar -->
-  <xacro:arg name="controllers_file" default="$(find clase6)/config/ros2_dp_controllers.yaml" />
+  <xacro:arg name="controllers_file" default="$(find clase7)/config/dp/ros2_controllers.yaml" />
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(arg controllers_file)</parameters>

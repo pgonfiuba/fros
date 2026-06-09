@@ -328,7 +328,7 @@
   <!-- Self collision -->
     <!-- Self collision -->
   <gazebo>
-    <self_collide>false</self_collide>
+    <self_collide>true</self_collide>
   </gazebo>
 
 
