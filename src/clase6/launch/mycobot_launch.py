@@ -21,6 +21,7 @@ from launch.actions import (
     SetEnvironmentVariable,
     RegisterEventHandler,
 )
+from launch_ros.parameter_descriptions import ParameterValue
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
@@ -31,7 +32,6 @@ from launch.substitutions import (
 )
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-import xacro
 
 
 def generate_launch_description():
@@ -81,24 +81,11 @@ def generate_launch_description():
         description='True para usar un clock simulado'
     )
 
-    arg_xacro_file = DeclareLaunchArgument(
-        'xacro_file',
-        default_value='dp/dp.xacro',
-        description='Archivo de definición del robot'
-    )
-
     arg_world_name = DeclareLaunchArgument(
         'world_name',
-        default_value='mundo_vacio.world',
+        default_value='mundo_escritorio.world',
         description='Nombre del archivo del mundo para Gazebo'
     )
-
-    arg_controllers_file = DeclareLaunchArgument(
-        'controllers_file',
-        default_value='ros2_dp_controllers.yaml',
-        description='Archivo de configuración de controladores'
-    )
-
 
 
     # ==========================================================================
@@ -108,20 +95,15 @@ def generate_launch_description():
     # ==========================================================================
 
     robot_description = {
-        'robot_description': Command([
-            FindExecutable(name='xacro'), ' ',
-            PathJoinSubstitution([
-                FindPackageShare('clase6'),
-                'robot_description',
-                LaunchConfiguration('xacro_file')
-            ]),
-            ' controllers_file:=',
-            PathJoinSubstitution([
-                FindPackageShare('clase6'),
-                'config',
-                LaunchConfiguration('controllers_file'),
-            ]),
-        ])
+        'robot_description': ParameterValue(
+                Command([
+                    FindExecutable(name='xacro'), ' ',
+                    os.path.join(pkg_share, 'robot_description', 'mycobot_320_m5_2022', 'mycobot_320_m5_2022.xacro'),
+                    ' controllers_file:=',
+                    os.path.join(pkg_share, 'config', 'mycobot_320_m5_2022', 'ros2_controllers.yaml'),
+                ]),
+            value_type=str
+        )
     }
 
 
@@ -176,11 +158,7 @@ def generate_launch_description():
         arguments=[
             'pid_controller', 
             '--param-file', 
-            PathJoinSubstitution([
-                FindPackageShare('clase6'),
-                'config',
-                LaunchConfiguration('controllers_file'),
-            ]),    
+            os.path.join(pkg_share, 'config', 'mycobot_320_m5_2022', 'ros2_controllers.yaml'),
         ],
     )
     # El controlador de esfuerzos se lanza después de que el joint_state_broadcaster esté corriendo, porque el PID necesita leer las posiciones de las articulaciones para calcular los esfuerzos.    
@@ -276,9 +254,7 @@ def generate_launch_description():
     return LaunchDescription([
         # Argumentos
         arg_use_sim_time,
-        arg_xacro_file,
         arg_world_name,
-        arg_controllers_file,
 
         # Entorno
         set_resource_path,
