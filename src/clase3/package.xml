@@ -3,8 +3,8 @@
 <package format="3">
   <name>clase3</name>
   <version>0.0.0</version>
-  <description>Material de la clase 3 de sistemas de referencias</description>
-  <maintainer email="pgonzal@fi.uba.ar">pablo</maintainer>
+  <description>Paquete para practicas sobre sistemas de referencias</description>
+  <maintainer email="pgonzal@fi.uba.ar">Pablo Gonzalez</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
