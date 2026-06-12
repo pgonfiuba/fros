@@ -1,103 +1,71 @@
-Arquitectura objetivo actualizando desde clase 5
+# Clase 7
 
-Gazebo (física)
-    ↕  gz_ros2_control plugin  (reemplaza el bridge de cmd_force)
-controller_manager
-    ├── joint_state_broadcaster  → publica /joint_states
-    └── pid_controller           → suscribe /pid_controller/reference
-                                   publica  /pid_controller/state
-Nodo PID (pid_controller de ros2_controllers)
-    ← recibe consigna de posición
-    → escribe effort a controller_manager
+## Objetivo
 
+Ejecutar la simulación en Gazebo con ROS 2, MoveIt y visualización en RViz/PlotJuggler, mostrando cómo se articula la descripción del robot, el control y la planificación del
 
-# Lanzar simulación del cobot con control PID
-ros2 launch clase6 sim_launch.py xacro_file:=mycobot_320_m5_2022/mycobot_320_m5_2022.xacro controllers_file:=ros2_mycobot_controllers.yaml
+- doble péndulo
+- cobot myCobot 300
 
+![Cobot esquivando obstaculos](docs/mycobot_plan.png)
+![Cobot esquivando obstaculos](docs/mycobot_execute.png)
 
-#*******************************************************
-# Directorio de trabajo
-cd ~/ros2_ws
+## Contenido
 
-#*******************************************************
-# Compilar doble pendulo
-colcon build --packages-select dp
+- `launch/mycobot_launch.py`: arranca Gazebo, publica el URDF generado por Xacro, spawnea el robot en el mundo, lanza los controladores y MoveIt, y abre RViz y PlotJuggler.
+- `launch/dp_launch.py`: ejemplo adicional de doble péndulo con Gazebo, `robot_state_publisher` y control ros2_control.
+- `robot_description/mycobot_320_m5_2022/mycobot_320_m5_2022.xacro`: definición del robot myCobot 320 M5 con componentes visuales, cinemática y configuración de control.
+- `config/mycobot_320_m5_2022/ros2_controllers.yaml`: parámetros de los controladores que se cargan en el launch.
+- `config/display.rviz`: configuración de RViz usada por el launch principal.
+- `config/plotjuggler_layout.xml`: layout de PlotJuggler para monitoreo de topics.
+- `worlds/`: mundos disponibles para Gazebo, incluyendo `mundo_escritorio.world` usado por defecto.
+- `scripts/move_to_pose.py` y `scripts/move_to_joints.py`: clientes de MoveIt que envían consignas de pose y de posiciones articulares.
 
-#*******************************************************
-# Correr la visualización solamente
-source install/setup.bash 
-ros2 launch dp display.launch.py 
+## Compilación
 
-#*******************************************************
-# Correr la simulación con el control (ROS2+Gz+RViz2)
-source install/setup.bash 
-ros2 launch dp dp_sim.launch.py 
+```bash
+colcon build --packages-select clase7 --symlink-install
+source install/setup.bash
+```bash
 
-#*******************************************************
-# Correr la simulación a lazo abierto (ROS2+Gz+RViz2)
-# Se usa effort controller para impostar directamente valores de torque en los ejes
-# Además el launch levanta el double_pendulum_caos.xacro que no tiene rozamiento y los límites de ejes están para
-# muchas vueltas, así como los límites de torque y de velocidad. De esta manera no se limita el comportamiento caótico
-source install/setup.bash 
-ros2 launch dp dp_sim.launch.py 
+## Ejecución
 
-#*******************************************************
-#Ver el URDF donde se definen los nombres de los joints.
-ros2 param get /robot_state_publisher robot_description
+- Simulación principal del myCobot con Gazebo, MoveIt, RViz y PlotJuggler:
 
-#*******************************************************
-#Muestra el estado del tópico (tipo de mensaje y cuántos están subscriptos)
-ros2 topic info /joint_states
- 
-#*******************************************************
-# Muestra el valor del tópico
-ros2 topic echo /joint_states
+```bash
+  ros2 launch clase7 mycobot_launch.py
+```
 
-#*******************************************************
-# Mover el robot por terminal (sin control)
-ros2 topic pub /joint_states sensor_msgs/msg/JointState "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: ''}, name: ['joint1', 'joint2'], position: [1.0, 0.5], velocity: [], effort: []}"
+- Cambiar el mundo de Gazebo:
 
-#*******************************************************
-# Activar/desactivar el control de posición
-ros2 control set_controller_state position_controller inactive
+```bash
+  ros2 launch clase7 mycobot_launch.py world_name:=mundo_obstaculos.world
+```  
 
-o bien usar gui
-ros2 run dp toggle_controller
+- Ejemplo alternativo del doble péndulo:
 
-#*******************************************************
-# Impone un impulso de torque
-ros2 topic pub /effort_controller/commands std_msgs/msg/Float64MultiArray "data: [0.5, 0.0]"
+```bash
+  ros2 launch clase7 dp_launch.py
+```  
 
-#*******************************************************
-# Impone una posicion de referencia al controlador position_controllers (le puedo pasar solo un destino pero no admite PID)
-ros2 topic pub /position_controller/commands std_msgs/msg/Float64MultiArray "data: [1.57, 0]" --once
+- En otra terminal, enviar un objetivo de pose con MoveIt:
 
-#*******************************************************
-# Impone una posicion de referencia al controlador joint_trajectory (le puedo pasar una trayectoria suave)
-ros2 topic pub /position_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "joint_names: ['joint1', 'joint2']
-points:
-- positions: [0, 1.57]
-  time_from_start: {sec: 1}" --once
+```bash
+  ros2 run clase7 move_to_pose
+```
 
-#*******************************************************
-# Graficador de topics de ROS
-ros2 run plotjuggler plotjuggler 
+- En otra terminal, enviar un objetivo de joints con MoveIt:
 
-#*******************************************************
-# Cambiar ganancias dinámicamente
-ros2 param set /position_controller gains.joint1.p 120.0
-ros2 param get /position_controller gains
+```bash
+  ros2 run clase7 move_to_joints
+```
 
-#*******************************************************
-# Ajuste por ZN 
-#Eje1:
-Ku = 120
-Tu = 0.150
-P = 0.6*Ku 
-I = 1.2 * Ku / Tu 
-D = 0.075 * Ku * Tu 
+## Qué explorar
 
-# Eje 2
-Ku=90
-Tu=0.060
+- `launch/mycobot_launch.py`: cómo se arma el flujo completo de Gazebo, controladores, MoveIt y visualización.
+- `robot_description/mycobot_320_m5_2022/mycobot_320_m5_2022.xacro`: estructura del robot y parámetros de los links/joints.
+- `config/mycobot_320_m5_2022/ros2_controllers.yaml`: definición de los controladores que se cargan en `controller_manager`.
+- `config/mycobot_320_m5_2022/moveit`: configuraciones varias de la planificación de trayectorias.
+- `worlds/mundo_escritorio.world` y `worlds/mundo_obstaculos.world`: el entorno físico de la simulación.
+- `scripts/move_to_pose.py` y `scripts/move_to_joints.py`: clientes de acción MoveIt que muestran planificación desde el launch.
 

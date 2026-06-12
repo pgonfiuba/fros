@@ -1,1 +1,0 @@
-ros2 launch clase6 sim_launch.py xacro_file:=mycobot_320_m5_2022/mycobot_320_m5_2022.xacro controllers_file:=ros2_mycobot_controllers.yaml world_name:=mundo_escritorio.world
