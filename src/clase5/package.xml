@@ -3,8 +3,8 @@
 <package format="3">
   <name>clase5</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="pgonzal@fi.uba.ar">pablo</maintainer>
+  <description>Paquete para simulación dinámica de robots</description>
+  <maintainer email="pgonzal@fi.uba.ar">Pablo Gonzalez</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
